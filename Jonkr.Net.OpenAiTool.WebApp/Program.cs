@@ -1,4 +1,5 @@
 using Jonkr.Net.OpenAiTool.WebApp.Components;
+using Serilog;
 
 namespace Jonkr.Net.OpenAiTool.WebApp
 {
@@ -7,6 +8,11 @@ namespace Jonkr.Net.OpenAiTool.WebApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Add Serilog logging configuration
+            builder.Host.UseSerilog((ctx, lc) =>
+                lc.ReadFrom.Configuration(ctx.Configuration)
+            );
 
             // Add services to the container.
             builder.Services.AddRazorComponents()
