@@ -1,14 +1,33 @@
 ﻿@page "/"
+@using OpenAI.Chat
 
 @rendermode InteractiveServer
 
 @inject ILogger<Home> logger
+@inject IConfiguration configuration
 
 <PageTitle>Home</PageTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary" @onclick=DoStuff>Test</button>
+        </div>
+    </div>
+</div>
 
 @code {
     protected override void OnInitialized()
     {
         logger.LogDebug("OnInitialized()");
+    }
+
+    private async Task DoStuff()
+    {
+        logger.LogDebug("DoStuff()");
+        ChatClient chatClient = new ChatClient(model: "gpt-5.1", apiKey: configuration["OpenAI:ApiKey"]);
+
+        ChatCompletion completion = await chatClient.CompleteChatAsync("Say 'this is a test.'");
+        logger.LogDebug($"[ASSISTANT]: {completion.Content[0].Text}");
     }
 }
